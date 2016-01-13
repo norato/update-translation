@@ -19,6 +19,7 @@
   "devDependencies": {
     "gulp": "^3.9.0",
     "gulp-json-editor": "^2.2.1",
+    "gulp-prompt": "^0.1.2",
     "gv": "^0.1.3"
   }
 }
