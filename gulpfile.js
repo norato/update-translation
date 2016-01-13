@@ -8,27 +8,60 @@ var languages = [
     {culture : 'fr-FR', translation: ''},
     {culture : 'nl-NL', translation: ''}
 ];
-var keyword   = '';
+var keyword = '';
 
 gulp.task('default',function(){getValues()});
 
 function getValues() {
     gulp.src(["translations/"])
-        .pipe(prompt.prompt([{
-            type: 'input',
-            name: 'first',
-            message: 'First question?'
-        },
-        ], function(res){
-            keyword = res.first;
+        .pipe(prompt.prompt(
+        questions
+        , function(res){
+            setValues(res);
             translate();
         })
-        .once('end', function () {
+        .on('end', function () {
             report();
-            process.exit();
         })
     );
 }
+var questions = [
+    {
+        type: 'input',
+        name: 'keyword',
+        message: 'Type keyword to translate:'
+    },
+    {
+        type: 'input',
+        name: 'de',
+        message: 'Type de-DE translation:'
+    },
+    {
+        type: 'input',
+        name: 'en',
+        message: 'Type en-GR translation:'
+    },
+    {
+        type: 'input',
+        name: 'fr',
+        message: 'Type fr-FR translation:'
+    },
+    {
+        type: 'input',
+        name: 'nl',
+        message: 'Type nl-NL translation:'
+    }
+];
+
+function setValues (res) {
+    keyword = res.keyword;
+
+    languages[0].translation = res.de;
+    languages[1].translation = res.en;
+    languages[2].translation = res.fr;
+    languages[3].translation = res.nl;
+}
+
 
 function translate() {
     languages.forEach(function (language) {
@@ -45,4 +78,5 @@ function translate() {
 
 function report () {
     console.log("Add key: ", keyword);
+    console.log("Press crtl+c to exit!");
 }
