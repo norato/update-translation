@@ -1,31 +1,32 @@
-var gulp = require("gulp");
-var jeditor = require("gulp-json-editor");
-var prompt = require("gulp-prompt");
+import gulp from "gulp"
+import jeditor from "gulp-json-editor"
+import prompt from "gulp-prompt"
 
-var languages = [
+let languages = [
     {culture : 'de-DE', translation: ''},
     {culture : 'en-GR', translation: ''},
     {culture : 'fr-FR', translation: ''},
     {culture : 'nl-NL', translation: ''}
-];
-var keyword = '';
+]
+let keyword = ''
 
-gulp.task('default',function(){getValues()});
+gulp.task('default', ['getValues']);
 
-function getValues() {
+gulp.task('getValues', () => {
     gulp.src(["translations/"])
         .pipe(prompt.prompt(
         questions
         , function(res){
-            setValues(res);
-            translate();
+            setValues(res)
+            translate()
         })
-        .on('end', function () {
-            report();
+        .on('end', () =>{
+            report()
         })
     );
-}
-var questions = [
+})
+
+let questions = [
     {
         type: 'input',
         name: 'keyword',
@@ -51,32 +52,32 @@ var questions = [
         name: 'nl',
         message: 'Type nl-NL translation:'
     }
-];
+]
 
-function setValues (res) {
-    keyword = res.keyword;
+var setValues = (res) => {
+    keyword = res.keyword
 
-    languages[0].translation = res.de;
-    languages[1].translation = res.en;
-    languages[2].translation = res.fr;
-    languages[3].translation = res.nl;
+    languages[0].translation = res.de
+    languages[1].translation = res.en
+    languages[2].translation = res.fr
+    languages[3].translation = res.nl
 }
 
 
-function translate() {
-    languages.forEach(function (language) {
-        var file = ["translations/translation-", language.culture,".json"].join("");
+var translate = () => {
+    languages.forEach( language => {
+        var file = ["translations/translation-", language.culture,".json"].join("")
 
         var retVar = {}
-        retVar[keyword] = language.translation;
+        retVar[keyword] = language.translation
 
         gulp.src(file)
           .pipe(jeditor(retVar))
-          .pipe(gulp.dest("changed"));
-    });
+          .pipe(gulp.dest("changed"))
+    })
 }
 
-function report () {
-    console.log("Add key: ", keyword);
-    console.log("Press crtl+c to exit!");
+var report = () => {
+    console.log("Add key: ", keyword)
+    console.log("Press crtl+c to exit!")
 }
